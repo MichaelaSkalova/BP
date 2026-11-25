@@ -25,11 +25,37 @@ cell_type_labels = np.random.choice(
     p=[0.45, 0.25, 0.15, 0.15]
 )
 
+donor_id = []
+
+for disease in diseases:
+    for donor in range(5):
+        donor_id.extend(
+            [f"{disease}_Donor_{donor+1}"] * 50
+        )
+
+donor_id = np.array(donor_id)   # type: ignore
+
+metadata = pd.DataFrame({
+    "disease": np.repeat(diseases, 250),
+    "donor_id": donor_id
+})
+
+metadata = metadata.sample(frac=1, random_state=42).reset_index(drop=True)
+
+cell_type_labels = np.random.choice(
+    cell_types,
+    size=n_cells,
+    p=[0.45, 0.25, 0.15, 0.15]
+)
+
 obs = pd.DataFrame({
-    "disease": disease_labels,
+    "disease": metadata["disease"].values,
+    "donor_id": metadata["donor_id"].values,
     "cell_type": cell_type_labels,
-    "sample_id": [f'Sample_{i // 50 + 1}' for i in range(n_cells)]
-}, index=[f'Cell_{i}' for i in range(n_cells)])
+    "sample_id": [
+        f"Sample_{i // 50 + 1}" for i in range(n_cells)
+    ]
+}, index=[f"Cell_{i}" for i in range(n_cells)])
 
 gene_categories = {
     "housekeeping": 250,
@@ -49,7 +75,7 @@ gene_types = np.array(gene_types)   # type: ignore
 np.random.shuffle(gene_types)
 
 var = pd.DataFrame({
-    "gene_type": gene_types,
+    "feature_type": gene_types,
 }, index=[f"Gene_{i}" for i in range(n_genes)])
 
 
@@ -131,10 +157,10 @@ adata.var["n_cells_by_counts"] = np.asarray((adata.X > 0).sum(axis=0)).flatten()
 
 gene_variance = np.asarray(adata.X.toarray().var(axis=0)).flatten()
 
-adata.write_h5ad("synthetic_data2.h5ad")
+adata.write_h5ad("synthetic_data3.h5ad")
 
 print(adata)
 print("\nDisease distribution: ")
 print(adata.obs["disease"].value_counts())
 print("\nGene type distribution: ")
-print(adata.var["gene_type"].value_counts())
+print(adata.var["feature_type"].value_counts())
