@@ -4,6 +4,7 @@ import anndata as ad        # type: ignore
 from scipy import sparse    # type: ignore
 
 np.random.seed(42)
+OUTPUT_FILE = "synthetic_data_test.h5ad"
 
 diseases = ["normal", "dementia", "schizophrenia", "alzheimer disease"]
 
@@ -157,7 +158,7 @@ adata.var["n_cells_by_counts"] = np.asarray((adata.X > 0).sum(axis=0)).flatten()
 
 gene_variance = np.asarray(adata.X.toarray().var(axis=0)).flatten()
 
-adata.write_h5ad("synthetic_data3.h5ad")
+adata.write_h5ad(OUTPUT_FILE)
 
 print(adata)
 print("\nDisease distribution: ")
