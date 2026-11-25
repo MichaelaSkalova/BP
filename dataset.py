@@ -24,6 +24,14 @@ class Dataset():
         return self.adata
 
 
+    def get_path(self):
+        return self.path
+
+
+    def get_original_path(self):
+        return self.original_path
+
+
     def restore_original(self):
         self.path = self.original_path
         self.adata = self.load_adata()
