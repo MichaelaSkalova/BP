@@ -38,7 +38,12 @@ class Dataset():
         self.analysis = Analyzer(self)
 
 
-    def keep_diseases(self, keep_diseases, sample_freq=1):
+    def read_batch(self, matrix, start, end):
+        X_batch = matrix[start:end]
+        return X_batch.tocsr(copy=False)
+
+
+    def keep_diseases(self, keep_diseases):
         all_indices = []
         rng = np.random.default_rng(self.RANDOM_STATE)
 
@@ -48,12 +53,7 @@ class Dataset():
             if positions.size == 0:
                 continue
 
-            if sample_freq == 1:
-                keep_count = len(positions)
-            else:
-                keep_count = int(round(len(positions) * sample_freq))
-
-            indices = np.sort(rng.choice(positions, size=keep_count, replace=False))
+            indices = np.sort(rng.choice(positions, size=len(positions), replace=False))
             all_indices.extend(indices.tolist())
 
         cell_indices = np.sort(np.asarray(all_indices, dtype=np.int64))
@@ -69,12 +69,7 @@ class Dataset():
         self.analysis = Analyzer(self)
 
 
-    def read_batch(self, matrix, start, end):
-        X_batch = matrix[start:end]
-        return X_batch.tocsr(copy=False)
-
-
-    def get_variable_percentile_subset(self, percentile):
+    def variable_percentile_subset(self, percentile):
         sums = np.zeros(self.adata.n_vars, dtype=np.float64)
         sum_squares = np.zeros(self.adata.n_vars, dtype=np.float64)
         n_cells = self.analysis.n_cells
