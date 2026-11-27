@@ -20,18 +20,6 @@ class Dataset():
         return adata
 
 
-    def get_adata(self):
-        return self.adata
-
-
-    def get_path(self):
-        return self.path
-
-
-    def get_original_path(self):
-        return self.original_path
-
-
     def restore_original(self):
         self.path = self.original_path
         self.adata = self.load_adata()
@@ -53,8 +41,7 @@ class Dataset():
             if positions.size == 0:
                 continue
 
-            indices = np.sort(rng.choice(positions, size=len(positions), replace=False))
-            all_indices.extend(indices.tolist())
+            all_indices.extend(positions.tolist())
 
         cell_indices = np.sort(np.asarray(all_indices, dtype=np.int64))
 
