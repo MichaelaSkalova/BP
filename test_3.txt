@@ -1,0 +1,75 @@
+Data amounts:
+
+   Cells:  1000
+   Genes:  1200
+
+========================================
+
+Diseases: 
+
+schizophrenia
+dementia
+alzheimer disease
+normal
+
+========================================
+
+Diseases (amount of cells): 
+
+  schizophrenia:  250
+  dementia:  250
+  alzheimer disease:  250
+  normal:  250
+
+Total: 4
+
+========================================
+
+Diseases (amount of cells) - split: 
+
+  schizophrenia:  250
+  dementia:  250
+  alzheimer disease:  250
+  normal:  250
+
+Total: 4
+
+========================================
+
+Donor amounts per disease: 
+
+  alzheimer disease:  5 donors
+  dementia:  5 donors
+  normal:  5 donors
+  schizophrenia:  5 donors
+
+Total: 4
+
+========================================
+
+Donor amounts per disease - split: 
+
+  alzheimer disease:  5 donors
+  dementia:  5 donors
+  normal:  5 donors
+  schizophrenia:  5 donors
+
+Total: 4
+
+========================================
+
+Feature types: 
+
+   housekeeping:  250
+   disease_associated:  200
+   inflammatory:  200
+   neuronal:  200
+   immune:  150
+   metabolic:  100
+   random:  100
+
+========================================
+
+Total donors: 20
+
+========================================

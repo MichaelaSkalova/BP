@@ -1,0 +1,25 @@
+{
+    "BASE_PATH": "...",
+
+    "SYNTHETIC_DATA": {
+        "outfile": "synthetic_data_test.h5ad",
+
+        "n_cells": 1000,
+        "n_genes": 1200,
+
+        "diseases": ["normal", "disease_1", "disease_2", "disease_3"],
+        "cell_types": ["type_1", "type_2", "type_3", "type_4", "type_5"],
+        "gene_categories": {
+            "cat_1": 250,
+            "cat_2": 200,
+            "cat_3": 200,
+            "cat_4": 150,
+            "cat_5": 200,
+            "cat_6": 100,
+            "cat_7": 100
+        }
+    },
+
+    "COHORTS": ["MSSM", "RADC", "Aging", "synthetic"]
+
+}
