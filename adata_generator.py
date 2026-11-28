@@ -3,6 +3,7 @@ import pandas as pd         # type: ignore
 import anndata as ad        # type: ignore
 from scipy import sparse    # type: ignore
 
+
 np.random.seed(42)
 OUTPUT_FILE = "synthetic_data_test.h5ad"
 
