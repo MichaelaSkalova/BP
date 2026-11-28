@@ -1,6 +1,7 @@
 import anndata as ad    # type: ignore
 import numpy as np
 from analyzer import Analyzer
+from scipy.sparse import issparse, csr_matrix, hstack   # type: ignore
 
 
 class Dataset():
@@ -13,6 +14,9 @@ class Dataset():
         self.original_path = path
         self.adata = self.load_adata()
         self.analysis = Analyzer(self)
+
+        self.data = None
+        self.labels = None
 
 
     def load_adata(self):
@@ -33,7 +37,6 @@ class Dataset():
 
     def keep_diseases(self, keep_diseases):
         all_indices = []
-        rng = np.random.default_rng(self.RANDOM_STATE)
 
         for disease in keep_diseases:
             positions = np.flatnonzero(self.analysis.cell_diseases == disease)
@@ -89,4 +92,57 @@ class Dataset():
 
     def train_test_split(self):
         pass
+
+
+    def get_data_and_labels(self):
+        data = csr_matrix(self.adata.X[:], dtype=np.float32)
+
+        data.indices = data.indices.astype(np.int32)
+        data.indptr = data.indptr.astype(np.int32)
+
+        labels_dict = dict()
+        labels = list()
+
+        for i in range(self.adata.n_obs):
+            label = self.adata.obs["diseaes"].iloc[i]
+
+            if label not in labels_dict.keys():
+                labels_dict[label] = list()
+
+            labels_dict[label].append(i)
+            labels.append(label)
+
+        self.csr_data = data
+        self.labels_dict = labels_dict
+        self.labels = np.asarray(labels)
+
+        return data, labels_dict, labels
+
+
+    def get_part(self, percent):
+        rng = np.random.default_rng(self.RANDOM_STATE)
+        test_inds_all = []
+
+        for key, inds in self.labels_dict.items():
+            inds = np.asarray(inds, dtype=np.int32)
+            test_len = int(len(inds) * percent)
+            test_inds = rng.choice(inds, size=test_len, replace=False)
+            test_inds_all.extend(test_inds.tolist())
+
+        test_inds_all = np.asarray(sorted(test_inds_all), dtype=np.int32)
+        train_inds_all = np.setdiff1d(np.arange(self.data.shape[0], dtype=np.int32), test_inds_all)
+
+        self.train_data = self.data[train_inds_all, :]
+        data1 = self.data[train_inds_all, :]
+
+        self.test_data = self.data[test_inds_all, :]
+        data2 = self.data[test_inds_all, :]
+
+        self.train_labels = self.labels[train_inds_all]
+        labels1 = self.labels[train_inds_all]
+
+        self.test_labels = self.labels[test_inds_all]
+        labels2 = self.labels[test_inds_all]
+
+        return data1, data2, labels1, labels2
 
